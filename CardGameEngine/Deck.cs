@@ -12,13 +12,24 @@ namespace CardGameEngine
         {
             _cards.Add(card);
         }
+
         public Card TakeNextCard()
         {
-            Card nextCard = _cards[0];
+            return TakeCardAtPosition(0);
+        }
 
-            _cards.RemoveAt(0);
+        public Card TakeRandomCard()
+        {
+            return TakeCardAtPosition(RandomNumberGenerator.NumberBetween(0, (RemainingCards - 1)));
+        }
 
-            return nextCard;
+        private Card TakeCardAtPosition(int position)
+        {
+            Card card = _cards[position];
+
+            _cards.RemoveAt(position);
+
+            return card;
         }
     }
 }

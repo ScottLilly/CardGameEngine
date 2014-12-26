@@ -10,7 +10,7 @@ namespace TestCardGameEngine
         [TestMethod]
         public void TestGetSingleDeck()
         {
-            Deck deck = Shuffler.GetDeck();
+            Deck deck = Shuffler.GetShuffledDeck();
 
             Assert.AreEqual(52, deck.RemainingCards);
         }
@@ -18,7 +18,7 @@ namespace TestCardGameEngine
         [TestMethod]
         public void TestGetTwoDecks()
         {
-            Deck deck = Shuffler.GetDecks(2);
+            Deck deck = Shuffler.GetShuffledDecks(2);
 
             Assert.AreEqual(104, deck.RemainingCards);
         }

@@ -2,12 +2,12 @@
 {
     public class Shuffler
     {
-        public static Deck GetDeck()
+        public static Deck GetShuffledDeck()
         {
-            return GetDecks(1);
+            return GetShuffledDecks(1);
         }
 
-        public static Deck GetDecks(int numberOfDecks)
+        public static Deck GetShuffledDecks(int numberOfDecks)
         {
             Deck deck = new Deck();
 
@@ -17,7 +17,7 @@
 
                 while(unshuffledDeck.RemainingCards > 0)
                 {
-                    deck.AddCard(unshuffledDeck.TakeNextCard());
+                    deck.AddCard(unshuffledDeck.TakeRandomCard());
                 }
             }
 
