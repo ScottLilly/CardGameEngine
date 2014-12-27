@@ -18,12 +18,7 @@ namespace CardGameEngine
             return TakeCardAtPosition(0);
         }
 
-        public Card TakeRandomCard()
-        {
-            return TakeCardAtPosition(RandomNumberGenerator.NumberBetween(0, (RemainingCards - 1)));
-        }
-
-        private Card TakeCardAtPosition(int position)
+        internal Card TakeCardAtPosition(int position)
         {
             Card card = _cards[position];
 

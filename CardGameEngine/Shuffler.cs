@@ -17,7 +17,7 @@
 
                 while(unshuffledDeck.RemainingCards > 0)
                 {
-                    deck.AddCard(unshuffledDeck.TakeRandomCard());
+                    deck.AddCard(unshuffledDeck.TakeCardAtPosition(RandomNumberGenerator.NumberBetween(0, (unshuffledDeck.RemainingCards - 1))));
                 }
             }
 
@@ -28,9 +28,9 @@
         {
             Deck deck = new Deck();
 
-            for(int i = 0; i < 4; i++) //Card suits
+            for(int i = 0; i < 4; i++) // Card suits
             {
-                for(int j = 1; j < 14; j++) // Card values
+                for(int j = 2; j <= 14; j++) // Card values (11 = jack, 12 = queen, 13 = king, 14 = ace)
                 {
                     switch(i)
                     {
