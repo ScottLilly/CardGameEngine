@@ -1,16 +1,16 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace CardGameEngine
+namespace CardGameEngine.Hands
 {
     public class PokerHand : Hand
     {
-        private readonly List<int> _hearts = new List<int>();
-        private readonly List<int> _clubs = new List<int>();
-        private readonly List<int> _diamonds = new List<int>();
-        private readonly List<int> _spades = new List<int>();
+        private readonly CardValueList _hearts = new CardValueList();
+        private readonly CardValueList _clubs = new CardValueList();
+        private readonly CardValueList _diamonds = new CardValueList();
+        private readonly CardValueList _spades = new CardValueList();
 
-        private readonly List<int> _allSuits = new List<int>();
+        private readonly CardValueList _allSuits = new CardValueList();
 
         public PokerHandValues Value
         {
@@ -26,20 +26,20 @@ namespace CardGameEngine
                     return PokerHandValues.StraightFlush;
                 }
 
-                if(_allSuits.Contains(4)) // Four of a kind
+                if(_allSuits.Values.Contains(4)) // Four of a kind
                 {
                     return PokerHandValues.FourOfAKind;
                 }
 
-                if(_allSuits.Contains(3) && _allSuits.Contains(2)) // Full house
+                if(_allSuits.Values.Contains(3) && _allSuits.Values.Contains(2)) // Full house
                 {
                     return PokerHandValues.FullHouse;
                 }
 
-                if((_hearts.Count(x => x == 1) >= 5) ||
-                    (_clubs.Count(x => x == 1) >= 5) ||
-                    (_diamonds.Count(x => x == 1) >= 5) ||
-                    (_spades.Count(x => x == 1) >= 5)) // Flush
+                if((_hearts.Values.Count(x => x == 1) >= 5) ||
+                    (_clubs.Values.Count(x => x == 1) >= 5) ||
+                    (_diamonds.Values.Count(x => x == 1) >= 5) ||
+                    (_spades.Values.Count(x => x == 1) >= 5)) // Flush
                 {
                     return PokerHandValues.Flush;
                 }
@@ -49,17 +49,17 @@ namespace CardGameEngine
                     return PokerHandValues.Straight;
                 }
 
-                if(_allSuits.Contains(3)) // Three of a kind
+                if(_allSuits.Values.Contains(3)) // Three of a kind
                 {
                     return PokerHandValues.ThreeOfAKind;
                 }
 
-                if(_allSuits.Count(x => x == 2) == 2) // Two pairs
+                if(_allSuits.Values.Count(x => x == 2) == 2) // Two pairs
                 {
                     return PokerHandValues.TwoPairs;
                 }
 
-                if(_allSuits.Count(x => x == 2) == 1) // One pair
+                if(_allSuits.Values.Count(x => x == 2) == 1) // One pair
                 {
                     return PokerHandValues.OnePair;
                 }
@@ -68,42 +68,33 @@ namespace CardGameEngine
             }
         }
 
-        public PokerHand()
+        public PokerHand(object id) : base(id)
         {
-            for(int i = 0; i <= 13; i++)
-            {
-                _hearts.Add(0);
-                _clubs.Add(0);
-                _diamonds.Add(0);
-                _spades.Add(0);
-
-                _allSuits.Add(0);
-            }
         }
 
-        public void AddCard(Card card)
+        public new void AddCard(Card card)
         {
-            Cards.Add(card);
+            base.AddCard(card);
 
             int cardValueIndex = (card.Value - 2);
 
             switch(card.Suit)
             {
                 case Suits.Hearts:
-                    _hearts[cardValueIndex]++;
+                    _hearts.Values[cardValueIndex]++;
                     break;
                 case Suits.Clubs:
-                    _clubs[cardValueIndex]++;
+                    _clubs.Values[cardValueIndex]++;
                     break;
                 case Suits.Diamonds:
-                    _diamonds[cardValueIndex]++;
+                    _diamonds.Values[cardValueIndex]++;
                     break;
                 case Suits.Spades:
-                    _spades[cardValueIndex]++;
+                    _spades.Values[cardValueIndex]++;
                     break;
             }
 
-            _allSuits[cardValueIndex]++;
+            _allSuits.Values[cardValueIndex]++;
         }
     }
 }

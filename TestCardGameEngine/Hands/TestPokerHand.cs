@@ -1,8 +1,9 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 using CardGameEngine;
+using CardGameEngine.Hands;
 
-namespace TestCardGameEngine
+namespace TestCardGameEngine.Hands
 {
     [TestClass]
     public class TestPokerHand
@@ -10,6 +11,9 @@ namespace TestCardGameEngine
         [TestMethod]
         public void TestRoyalFlushIsFound()
         {
+            PokerHand hand = new PokerHand("");
+
+//            hand.AddCard();
         }
 
         [TestMethod]
@@ -20,7 +24,7 @@ namespace TestCardGameEngine
         [TestMethod]
         public void TestFourOfAKindIsFound()
         {
-            PokerHand hand = new PokerHand();
+            PokerHand hand = new PokerHand("");
 
             hand.AddCard(new Card(5, Suits.Hearts));
             hand.AddCard(new Card(5, Suits.Clubs));
@@ -35,7 +39,7 @@ namespace TestCardGameEngine
         [TestMethod]
         public void TestFullHouseIsFound()
         {
-            PokerHand hand = new PokerHand();
+            PokerHand hand = new PokerHand("");
 
             hand.AddCard(new Card(5, Suits.Hearts));
             hand.AddCard(new Card(5, Suits.Clubs));
@@ -50,10 +54,10 @@ namespace TestCardGameEngine
         [TestMethod]
         public void TestFlushIsFound()
         {
-            PokerHand heartsHand = new PokerHand();
-            PokerHand clubsHand = new PokerHand();
-            PokerHand diamondsHand = new PokerHand();
-            PokerHand spadesHand = new PokerHand();
+            PokerHand heartsHand = new PokerHand("");
+            PokerHand clubsHand = new PokerHand("");
+            PokerHand diamondsHand = new PokerHand("");
+            PokerHand spadesHand = new PokerHand("");
 
             heartsHand.AddCard(new Card(7, Suits.Hearts));
             heartsHand.AddCard(new Card(5, Suits.Hearts));
@@ -93,7 +97,7 @@ namespace TestCardGameEngine
         [TestMethod]
         public void TestThreeOfAKindIsFound()
         {
-            PokerHand hand = new PokerHand();
+            PokerHand hand = new PokerHand("");
 
             hand.AddCard(new Card(5, Suits.Hearts));
             hand.AddCard(new Card(5, Suits.Clubs));
@@ -108,7 +112,7 @@ namespace TestCardGameEngine
         [TestMethod]
         public void TestTwoPairsIsFound()
         {
-            PokerHand hand = new PokerHand();
+            PokerHand hand = new PokerHand("");
 
             hand.AddCard(new Card(5, Suits.Hearts));
             hand.AddCard(new Card(5, Suits.Clubs));
@@ -124,7 +128,7 @@ namespace TestCardGameEngine
         [TestMethod]
         public void TestOnePairIsFound()
         {
-            PokerHand hand = new PokerHand();
+            PokerHand hand = new PokerHand("");
 
             hand.AddCard(new Card(5, Suits.Hearts));
             hand.AddCard(new Card(5, Suits.Clubs));
@@ -139,7 +143,7 @@ namespace TestCardGameEngine
         [TestMethod]
         public void TestHighCardIsFound()
         {
-            PokerHand hand = new PokerHand();
+            PokerHand hand = new PokerHand("");
 
             hand.AddCard(new Card(6, Suits.Hearts));
             hand.AddCard(new Card(5, Suits.Clubs));
