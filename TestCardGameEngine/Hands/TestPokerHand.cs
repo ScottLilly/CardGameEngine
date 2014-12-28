@@ -11,9 +11,39 @@ namespace TestCardGameEngine.Hands
         [TestMethod]
         public void TestRoyalFlushIsFound()
         {
-            PokerHand hand = new PokerHand("");
+            PokerHand heartHand = new PokerHand("");
+            PokerHand clubHand = new PokerHand("");
+            PokerHand diamondHand = new PokerHand("");
+            PokerHand spadeHand = new PokerHand("");
 
-//            hand.AddCard();
+            heartHand.AddCard(CardValues.Ace, Suits.Hearts);
+            heartHand.AddCard(CardValues.King, Suits.Hearts);
+            heartHand.AddCard(CardValues.Queen, Suits.Hearts);
+            heartHand.AddCard(CardValues.Jack, Suits.Hearts);
+            heartHand.AddCard(CardValues.Ten, Suits.Hearts);
+
+            clubHand.AddCard(CardValues.Ace, Suits.Clubs);
+            clubHand.AddCard(CardValues.King, Suits.Clubs);
+            clubHand.AddCard(CardValues.Queen, Suits.Clubs);
+            clubHand.AddCard(CardValues.Jack, Suits.Clubs);
+            clubHand.AddCard(CardValues.Ten, Suits.Clubs);
+
+            diamondHand.AddCard(CardValues.Ace, Suits.Diamonds);
+            diamondHand.AddCard(CardValues.King, Suits.Diamonds);
+            diamondHand.AddCard(CardValues.Queen, Suits.Diamonds);
+            diamondHand.AddCard(CardValues.Jack, Suits.Diamonds);
+            diamondHand.AddCard(CardValues.Ten, Suits.Diamonds);
+
+            spadeHand.AddCard(CardValues.Ace, Suits.Spades);
+            spadeHand.AddCard(CardValues.King, Suits.Spades);
+            spadeHand.AddCard(CardValues.Queen, Suits.Spades);
+            spadeHand.AddCard(CardValues.Jack, Suits.Spades);
+            spadeHand.AddCard(CardValues.Ten, Suits.Spades);
+
+            Assert.AreEqual(PokerHandValues.RoyalFlush, heartHand.Value);
+            Assert.AreEqual(PokerHandValues.RoyalFlush, clubHand.Value);
+            Assert.AreEqual(PokerHandValues.RoyalFlush, diamondHand.Value);
+            Assert.AreEqual(PokerHandValues.RoyalFlush, spadeHand.Value);
         }
 
         [TestMethod]
@@ -26,12 +56,12 @@ namespace TestCardGameEngine.Hands
         {
             PokerHand hand = new PokerHand("");
 
-            hand.AddCard(new Card(5, Suits.Hearts));
-            hand.AddCard(new Card(5, Suits.Clubs));
-            hand.AddCard(new Card(5, Suits.Diamonds));
-            hand.AddCard(new Card(5, Suits.Spades));
+            hand.AddCard(CardValues.Five, Suits.Hearts);
+            hand.AddCard(CardValues.Five, Suits.Clubs);
+            hand.AddCard(CardValues.Five, Suits.Diamonds);
+            hand.AddCard(CardValues.Five, Suits.Spades);
 
-            hand.AddCard(new Card(4, Suits.Spades));
+            hand.AddCard(CardValues.Four, Suits.Spades);
 
             Assert.AreEqual(PokerHandValues.FourOfAKind, hand.Value);
         }
@@ -41,12 +71,12 @@ namespace TestCardGameEngine.Hands
         {
             PokerHand hand = new PokerHand("");
 
-            hand.AddCard(new Card(5, Suits.Hearts));
-            hand.AddCard(new Card(5, Suits.Clubs));
-            hand.AddCard(new Card(5, Suits.Diamonds));
+            hand.AddCard(CardValues.Five, Suits.Hearts);
+            hand.AddCard(CardValues.Five, Suits.Clubs);
+            hand.AddCard(CardValues.Five, Suits.Diamonds);
 
-            hand.AddCard(new Card(4, Suits.Hearts));
-            hand.AddCard(new Card(4, Suits.Clubs));
+            hand.AddCard(CardValues.Four, Suits.Hearts);
+            hand.AddCard(CardValues.Four, Suits.Clubs);
 
             Assert.AreEqual(PokerHandValues.FullHouse, hand.Value);
         }
@@ -59,29 +89,30 @@ namespace TestCardGameEngine.Hands
             PokerHand diamondsHand = new PokerHand("");
             PokerHand spadesHand = new PokerHand("");
 
-            heartsHand.AddCard(new Card(7, Suits.Hearts));
-            heartsHand.AddCard(new Card(5, Suits.Hearts));
-            heartsHand.AddCard(new Card(4, Suits.Hearts));
-            heartsHand.AddCard(new Card(3, Suits.Hearts));
-            heartsHand.AddCard(new Card(2, Suits.Hearts));
+            heartsHand.AddCard(CardValues.Seven, Suits.Hearts);
+            heartsHand.AddCard(CardValues.Five, Suits.Hearts);
+            heartsHand.AddCard(CardValues.Four, Suits.Hearts);
+            heartsHand.AddCard(CardValues.Three, Suits.Hearts);
+            heartsHand.AddCard(CardValues.Two, Suits.Hearts);
 
-            clubsHand.AddCard(new Card(7, Suits.Clubs));
-            clubsHand.AddCard(new Card(5, Suits.Clubs));
-            clubsHand.AddCard(new Card(4, Suits.Clubs));
-            clubsHand.AddCard(new Card(3, Suits.Clubs));
-            clubsHand.AddCard(new Card(2, Suits.Clubs));
+            clubsHand.AddCard(CardValues.Seven, Suits.Clubs);
+            clubsHand.AddCard(CardValues.Five, Suits.Clubs);
+            clubsHand.AddCard(CardValues.Four, Suits.Clubs);
+            clubsHand.AddCard(CardValues.Three, Suits.Clubs);
+            clubsHand.AddCard(CardValues.Two, Suits.Clubs);
 
-            diamondsHand.AddCard(new Card(7, Suits.Diamonds));
-            diamondsHand.AddCard(new Card(5, Suits.Diamonds));
-            diamondsHand.AddCard(new Card(4, Suits.Diamonds));
-            diamondsHand.AddCard(new Card(3, Suits.Diamonds));
-            diamondsHand.AddCard(new Card(2, Suits.Diamonds));
+            diamondsHand.AddCard(CardValues.Seven, Suits.Diamonds);
+            diamondsHand.AddCard(CardValues.Five, Suits.Diamonds);
+            diamondsHand.AddCard(CardValues.Four, Suits.Diamonds);
+            diamondsHand.AddCard(CardValues.Three, Suits.Diamonds);
+            diamondsHand.AddCard(CardValues.Two, Suits.Diamonds);
 
-            spadesHand.AddCard(new Card(7, Suits.Spades));
-            spadesHand.AddCard(new Card(5, Suits.Spades));
-            spadesHand.AddCard(new Card(4, Suits.Spades));
-            spadesHand.AddCard(new Card(3, Suits.Spades));
-            spadesHand.AddCard(new Card(2, Suits.Spades));
+            spadesHand.AddCard(CardValues.Seven, Suits.Spades);
+            spadesHand.AddCard(CardValues.Five, Suits.Spades);
+            spadesHand.AddCard(CardValues.Four, Suits.Spades);
+            spadesHand.AddCard(CardValues.Three, Suits.Spades);
+            spadesHand.AddCard(CardValues.Two, Suits.Spades);
+
 
             Assert.AreEqual(PokerHandValues.Flush, heartsHand.Value);
             Assert.AreEqual(PokerHandValues.Flush, clubsHand.Value);
@@ -99,12 +130,12 @@ namespace TestCardGameEngine.Hands
         {
             PokerHand hand = new PokerHand("");
 
-            hand.AddCard(new Card(5, Suits.Hearts));
-            hand.AddCard(new Card(5, Suits.Clubs));
-            hand.AddCard(new Card(5, Suits.Diamonds));
+            hand.AddCard(CardValues.Five, Suits.Hearts);
+            hand.AddCard(CardValues.Five, Suits.Clubs);
+            hand.AddCard(CardValues.Five, Suits.Diamonds);
 
-            hand.AddCard(new Card(4, Suits.Hearts));
-            hand.AddCard(new Card(3, Suits.Hearts));
+            hand.AddCard(CardValues.Four, Suits.Hearts);
+            hand.AddCard(CardValues.Three, Suits.Hearts);
 
             Assert.AreEqual(PokerHandValues.ThreeOfAKind, hand.Value);
         }
@@ -114,13 +145,13 @@ namespace TestCardGameEngine.Hands
         {
             PokerHand hand = new PokerHand("");
 
-            hand.AddCard(new Card(5, Suits.Hearts));
-            hand.AddCard(new Card(5, Suits.Clubs));
+            hand.AddCard(CardValues.Five, Suits.Hearts);
+            hand.AddCard(CardValues.Five, Suits.Clubs);
 
-            hand.AddCard(new Card(4, Suits.Hearts));
-            hand.AddCard(new Card(4, Suits.Clubs));
+            hand.AddCard(CardValues.Four, Suits.Hearts);
+            hand.AddCard(CardValues.Four, Suits.Clubs);
 
-            hand.AddCard(new Card(3, Suits.Diamonds));
+            hand.AddCard(CardValues.Three, Suits.Diamonds);
 
             Assert.AreEqual(PokerHandValues.TwoPairs, hand.Value);
         }
@@ -130,12 +161,12 @@ namespace TestCardGameEngine.Hands
         {
             PokerHand hand = new PokerHand("");
 
-            hand.AddCard(new Card(5, Suits.Hearts));
-            hand.AddCard(new Card(5, Suits.Clubs));
+            hand.AddCard(CardValues.Five, Suits.Hearts);
+            hand.AddCard(CardValues.Five, Suits.Clubs);
 
-            hand.AddCard(new Card(4, Suits.Hearts));
-            hand.AddCard(new Card(3, Suits.Hearts));
-            hand.AddCard(new Card(2, Suits.Hearts));
+            hand.AddCard(CardValues.Four, Suits.Hearts);
+            hand.AddCard(CardValues.Three, Suits.Hearts);
+            hand.AddCard(CardValues.Two, Suits.Hearts);
 
             Assert.AreEqual(PokerHandValues.OnePair, hand.Value);
         }
@@ -145,11 +176,11 @@ namespace TestCardGameEngine.Hands
         {
             PokerHand hand = new PokerHand("");
 
-            hand.AddCard(new Card(6, Suits.Hearts));
-            hand.AddCard(new Card(5, Suits.Clubs));
-            hand.AddCard(new Card(4, Suits.Hearts));
-            hand.AddCard(new Card(3, Suits.Hearts));
-            hand.AddCard(new Card(2, Suits.Hearts));
+            hand.AddCard(CardValues.Seven, Suits.Hearts);
+            hand.AddCard(CardValues.Five, Suits.Clubs);
+            hand.AddCard(CardValues.Four, Suits.Hearts);
+            hand.AddCard(CardValues.Three, Suits.Hearts);
+            hand.AddCard(CardValues.Two, Suits.Hearts);
 
             Assert.AreEqual(PokerHandValues.HighCard, hand.Value);
         }

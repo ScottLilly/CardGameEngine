@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 
 namespace CardGameEngine.Hands
 {
@@ -16,12 +15,15 @@ namespace CardGameEngine.Hands
         {
             get
             {
-                if(false) // Royal flush
+                if(HasRoyalFlush(_hearts) || 
+                    HasRoyalFlush(_clubs) || 
+                    HasRoyalFlush(_diamonds) ||
+                    HasRoyalFlush(_spades)) // Royal flush (Ace/King/Queen/Jack/10, of the same suit)
                 {
                     return PokerHandValues.RoyalFlush;
                 }
 
-                if(false) // Straight flush
+                if(false) // Straight flush (five cards of the same suit, in a row - excluding 10 -> Ace)
                 {
                     return PokerHandValues.StraightFlush;
                 }
@@ -39,12 +41,12 @@ namespace CardGameEngine.Hands
                 if((_hearts.Values.Count(x => x == 1) >= 5) ||
                     (_clubs.Values.Count(x => x == 1) >= 5) ||
                     (_diamonds.Values.Count(x => x == 1) >= 5) ||
-                    (_spades.Values.Count(x => x == 1) >= 5)) // Flush
+                    (_spades.Values.Count(x => x == 1) >= 5)) // Flush (five cards of the same suit)
                 {
                     return PokerHandValues.Flush;
                 }
 
-                if(false) // Straight
+                if(false) // Straight (five cards in a row)
                 {
                     return PokerHandValues.Straight;
                 }
@@ -72,29 +74,41 @@ namespace CardGameEngine.Hands
         {
         }
 
-        public new void AddCard(Card card)
+        public new void AddCard(CardValues value, Suits suit)
         {
-            base.AddCard(card);
+            base.AddCard(value, suit);
 
-            int cardValueIndex = (card.Value - 2);
-
-            switch(card.Suit)
+            switch(suit)
             {
                 case Suits.Hearts:
-                    _hearts.Values[cardValueIndex]++;
+                    _hearts.IncrementCounterFor(value);
                     break;
                 case Suits.Clubs:
-                    _clubs.Values[cardValueIndex]++;
+                    _clubs.IncrementCounterFor(value);
                     break;
                 case Suits.Diamonds:
-                    _diamonds.Values[cardValueIndex]++;
+                    _diamonds.IncrementCounterFor(value);
                     break;
                 case Suits.Spades:
-                    _spades.Values[cardValueIndex]++;
+                    _spades.IncrementCounterFor(value);
                     break;
             }
 
-            _allSuits.Values[cardValueIndex]++;
+            _allSuits.IncrementCounterFor(value);
+        }
+
+        private bool HasRoyalFlush(CardValueList cardValueList)
+        {
+            if(cardValueList.HasCard(CardValues.Ace) && 
+                cardValueList.HasCard(CardValues.King) && 
+                cardValueList.HasCard(CardValues.Queen) && 
+                cardValueList.HasCard(CardValues.Jack) &&
+                cardValueList.HasCard(CardValues.Ten))
+            {
+                return true;
+            }
+
+            return false;
         }
     }
 }

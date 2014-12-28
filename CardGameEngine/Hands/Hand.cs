@@ -19,9 +19,9 @@ namespace CardGameEngine.Hands
             ID = id;
         }
 
-        protected void AddCard(Card card)
+        protected void AddCard(CardValues value, Suits suit)
         {
-            _cards.Add(card);
+            _cards.Add(new Card(value, suit));
         }
     }
 }

@@ -8,9 +8,9 @@ namespace CardGameEngine
 
         public int RemainingCards { get { return _cards.Count; } }
 
-        internal void AddCard(Card card)
+        internal void AddCard(CardValues value, Suits suit)
         {
-            _cards.Add(card);
+            _cards.Add(new Card(value, suit));
         }
 
         public Card TakeNextCard()
