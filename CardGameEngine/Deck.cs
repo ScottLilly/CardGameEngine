@@ -18,6 +18,14 @@ namespace CardGameEngine
             return TakeCardAtPosition(0);
         }
 
+        public void BurnCard()
+        {
+            if(RemainingCards > 0)
+            {
+                _cards.RemoveAt(0);
+            }
+        }
+
         internal Card TakeCardAtPosition(int position)
         {
             Card card = _cards[position];

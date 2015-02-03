@@ -1,74 +1,62 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace CardGameEngine.Hands
 {
     public class PokerHand : Hand
     {
-        private readonly CardValueList _hearts = new CardValueList();
-        private readonly CardValueList _clubs = new CardValueList();
-        private readonly CardValueList _diamonds = new CardValueList();
-        private readonly CardValueList _spades = new CardValueList();
-
-        private readonly CardValueList _allSuits = new CardValueList();
+        // This is to hold the five cards used to make the player's hand.
+        // It's needed so we can deal with game such as Texas Hold 'Em, where the player makes a five card hand out of seven cards
+        private readonly List<Card> _cardsForHand = new List<Card>();
 
         public PokerHandValues Value
         {
             get
             {
-                // Keep these checks in this order, from highest hand value to lowest, so you always return the highest hand value.
-                //
-                // For example, TwoPair would also pass the test for OnePair.
+                // Keep the checks in this order, from highest hand value to lowest.
+                // This way, you always return the highest hand value.
 
-                if(HasRoyalFlush(_hearts) || 
-                    HasRoyalFlush(_clubs) || 
-                    HasRoyalFlush(_diamonds) ||
-                    HasRoyalFlush(_spades)) // Royal flush (Ace/King/Queen/Jack/10, of the same suit)
+                if(HasRoyalFlush())
                 {
                     return PokerHandValues.RoyalFlush;
                 }
 
-                if(HasStraight(_hearts) ||
-                    HasStraight(_clubs) || 
-                    HasStraight(_diamonds) || 
-                    HasStraight(_spades)) // Straight flush (five cards of the same suit, in a row - excluding 10 -> Ace)
+                if(HasStraightFlush())
                 {
                     return PokerHandValues.StraightFlush;
                 }
 
-                if(_allSuits.Values.Contains(4)) // Four of a kind
+                if(CardsForAllSuits.Contains(4))
                 {
                     return PokerHandValues.FourOfAKind;
                 }
 
-                if(_allSuits.Values.Contains(3) && _allSuits.Values.Contains(2)) // Full house
+                if(CardsForAllSuits.Contains(3) && CardsForAllSuits.Contains(2))
                 {
                     return PokerHandValues.FullHouse;
                 }
 
-                if((_hearts.Values.Count(x => x == 1) >= 5) ||
-                    (_clubs.Values.Count(x => x == 1) >= 5) ||
-                    (_diamonds.Values.Count(x => x == 1) >= 5) ||
-                    (_spades.Values.Count(x => x == 1) >= 5)) // Flush (five cards of the same suit)
+                if(HasFlush())
                 {
                     return PokerHandValues.Flush;
                 }
 
-                if(HasStraight(_allSuits)) // Straight (five cards in a row, any suit combination)
+                if(HasStraight())
                 {
                     return PokerHandValues.Straight;
                 }
 
-                if(_allSuits.Values.Contains(3)) // Three of a kind
+                if(CardsForAllSuits.Contains(3))
                 {
                     return PokerHandValues.ThreeOfAKind;
                 }
 
-                if(_allSuits.Values.Count(x => x == 2) == 2) // Two pairs
+                if(CardsForAllSuits.Count(x => x == 2) == 2)
                 {
                     return PokerHandValues.TwoPairs;
                 }
 
-                if(_allSuits.Values.Count(x => x == 2) == 1) // One pair
+                if(CardsForAllSuits.Count(x => x == 2) == 1)
                 {
                     return PokerHandValues.OnePair;
                 }
@@ -81,120 +69,123 @@ namespace CardGameEngine.Hands
         {
         }
 
-        public new void AddCard(CardValues value, Suits suit)
+        public void AddCard(CardValues value, Suits suit)
         {
-            base.AddCard(value, suit);
-
-            switch(suit)
-            {
-                case Suits.Hearts:
-                    _hearts.IncrementCounterFor(value);
-                    break;
-                case Suits.Clubs:
-                    _clubs.IncrementCounterFor(value);
-                    break;
-                case Suits.Diamonds:
-                    _diamonds.IncrementCounterFor(value);
-                    break;
-                case Suits.Spades:
-                    _spades.IncrementCounterFor(value);
-                    break;
-            }
-
-            _allSuits.IncrementCounterFor(value);
+            base.AddCard(new Card(value, suit));
         }
 
-        private static bool HasRoyalFlush(CardValueList suitCardValueList)
+        private bool HasRoyalFlush()
         {
-            return suitCardValueList.HasCard(CardValues.Ace) && 
-                   suitCardValueList.HasCard(CardValues.King) && 
-                   suitCardValueList.HasCard(CardValues.Queen) && 
-                   suitCardValueList.HasCard(CardValues.Jack) &&
-                   suitCardValueList.HasCard(CardValues.Ten);
+            // Ace/King/Queen/Jack/10, of the same suit
+
+            return CardsForEachSuit.Values.Any(cards => 
+                ArrayPositions(CardValues.Ace).All(x => cards[x] > 0) && 
+                ArrayPositions(CardValues.King).All(x => cards[x] > 0) && 
+                ArrayPositions(CardValues.Queen).All(x => cards[x] > 0) && 
+                ArrayPositions(CardValues.Jack).All(x => cards[x] > 0) && 
+                ArrayPositions(CardValues.Ten).All(x => cards[x] > 0));
         }
 
-        private static bool HasStraight(CardValueList suitCardValueList)
+        private bool HasStraightFlush()
         {
-            // Don't check for an Ace-high straight-flush, since that would be found as a Royal Flush
+            // Five cards of the same suit, in a row - excluding Ace -> 10 [Royal Flush]
 
-            if(suitCardValueList.HasCard(CardValues.King) &&
-               suitCardValueList.HasCard(CardValues.Queen) &&
-               suitCardValueList.HasCard(CardValues.Jack) &&
-               suitCardValueList.HasCard(CardValues.Ten) &&
-               suitCardValueList.HasCard(CardValues.Nine))
+            return CardsForEachSuit.Values.Any(StraightExists);
+        }
+
+        private bool HasFlush()
+        {
+            // Five cards of the same suit
+
+            foreach(int[] cards in CardsForEachSuit.Values)
+            {
+                int cardsForSuit = 0;
+
+                // Need to offset by one, so we don't count the ace twice (since it's in two positions, for high and low card)
+                for(int i = 1; i < cards.Length; i++)
+                {
+                    if(cards[i] == 1)
+                    {
+                        cardsForSuit++;
+                    }
+                }
+
+                if(cardsForSuit >= 5)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private bool HasStraight()
+        {
+            // Five cards in a row, any suit combination
+
+            return StraightExists(CardsForAllSuits);
+        }
+
+        private static bool StraightExists(int[] cards)
+        {
+            bool hasKing = ArrayPositions(CardValues.King).All(x => cards[x] > 0);
+            bool hasQueen = ArrayPositions(CardValues.Queen).All(x => cards[x] > 0);
+            bool hasJack = ArrayPositions(CardValues.Jack).All(x => cards[x] > 0);
+            bool hasTen = ArrayPositions(CardValues.Ten).All(x => cards[x] > 0);
+            bool hasNine = ArrayPositions(CardValues.Nine).All(x => cards[x] > 0);
+            bool hasEight = ArrayPositions(CardValues.Eight).All(x => cards[x] > 0);
+            bool hasSeven = ArrayPositions(CardValues.Seven).All(x => cards[x] > 0);
+            bool hasSix = ArrayPositions(CardValues.Six).All(x => cards[x] > 0);
+            bool hasFive = ArrayPositions(CardValues.Five).All(x => cards[x] > 0);
+            bool hasFour = ArrayPositions(CardValues.Four).All(x => cards[x] > 0);
+            bool hasThree = ArrayPositions(CardValues.Three).All(x => cards[x] > 0);
+            bool hasTwo = ArrayPositions(CardValues.Two).All(x => cards[x] > 0);
+            bool hasAce = ArrayPositions(CardValues.Ace).All(x => cards[x] > 0);
+
+            // Don't check for an Ace-high straight-flush, since that would be a Royal Flush
+
+            if(hasKing && hasQueen && hasJack && hasTen && hasNine)
             {
                 return true;
             }
 
-            if(suitCardValueList.HasCard(CardValues.Queen) &&
-               suitCardValueList.HasCard(CardValues.Jack) &&
-               suitCardValueList.HasCard(CardValues.Ten) &&
-               suitCardValueList.HasCard(CardValues.Nine) &&
-               suitCardValueList.HasCard(CardValues.Eight))
+            if(hasQueen && hasJack && hasTen && hasNine && hasEight)
             {
                 return true;
             }
 
-            if(suitCardValueList.HasCard(CardValues.Jack) &&
-               suitCardValueList.HasCard(CardValues.Ten) &&
-               suitCardValueList.HasCard(CardValues.Nine) &&
-               suitCardValueList.HasCard(CardValues.Eight) &&
-               suitCardValueList.HasCard(CardValues.Seven))
+            if(hasJack && hasTen && hasNine && hasEight && hasSeven)
             {
                 return true;
             }
 
-            if(suitCardValueList.HasCard(CardValues.Ten) &&
-               suitCardValueList.HasCard(CardValues.Nine) &&
-               suitCardValueList.HasCard(CardValues.Eight) &&
-               suitCardValueList.HasCard(CardValues.Seven) &&
-               suitCardValueList.HasCard(CardValues.Six))
+            if(hasTen && hasNine && hasEight && hasSeven && hasSix)
             {
                 return true;
             }
 
-            if(suitCardValueList.HasCard(CardValues.Nine) &&
-               suitCardValueList.HasCard(CardValues.Eight) &&
-               suitCardValueList.HasCard(CardValues.Seven) &&
-               suitCardValueList.HasCard(CardValues.Six) &&
-               suitCardValueList.HasCard(CardValues.Five))
+            if(hasNine && hasEight && hasSeven && hasSix && hasFive)
             {
                 return true;
             }
 
-            if(suitCardValueList.HasCard(CardValues.Eight) &&
-               suitCardValueList.HasCard(CardValues.Seven) &&
-               suitCardValueList.HasCard(CardValues.Six) &&
-               suitCardValueList.HasCard(CardValues.Five) &&
-               suitCardValueList.HasCard(CardValues.Four))
+            if(hasEight && hasSeven && hasSix && hasFive && hasFour)
             {
                 return true;
             }
 
-            if(suitCardValueList.HasCard(CardValues.Seven) &&
-               suitCardValueList.HasCard(CardValues.Six) &&
-               suitCardValueList.HasCard(CardValues.Five) &&
-               suitCardValueList.HasCard(CardValues.Four) &&
-               suitCardValueList.HasCard(CardValues.Three))
+            if(hasSeven && hasSix && hasFive && hasFour && hasThree)
             {
                 return true;
             }
 
-            if(suitCardValueList.HasCard(CardValues.Six) &&
-               suitCardValueList.HasCard(CardValues.Five) &&
-               suitCardValueList.HasCard(CardValues.Four) &&
-               suitCardValueList.HasCard(CardValues.Three) &&
-               suitCardValueList.HasCard(CardValues.Two))
+            if(hasSix && hasFive && hasFour && hasThree && hasTwo)
             {
                 return true;
             }
 
-            // Check for a straight, using the Ace as a one
-            if(suitCardValueList.HasCard(CardValues.Five) &&
-               suitCardValueList.HasCard(CardValues.Four) &&
-               suitCardValueList.HasCard(CardValues.Three) &&
-               suitCardValueList.HasCard(CardValues.Two) &&
-               suitCardValueList.HasCard(CardValues.Ace))
+            // Use the Ace as a one
+            if(hasFive && hasFour && hasThree && hasTwo && hasAce)
             {
                 return true;
             }

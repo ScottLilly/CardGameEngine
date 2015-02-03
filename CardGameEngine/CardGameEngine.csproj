@@ -40,9 +40,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Card.cs" />
-    <Compile Include="CardValueList.cs" />
     <Compile Include="Deck.cs" />
     <Compile Include="Enums.cs" />
+    <Compile Include="HandEvaluator.cs" />
     <Compile Include="Hands\Hand.cs" />
     <Compile Include="Hands\PokerHand.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -1,32 +1,8 @@
 ﻿namespace CardGameEngine
 {
-    public class Shuffler
+    public static class Shuffler
     {
-        public static Deck GetShuffledDeck()
-        {
-            return GetShuffledDecks(1);
-        }
-
-        public static Deck GetShuffledDecks(int numberOfDecks)
-        {
-            Deck deck = new Deck();
-
-            for(int i = 0; i < numberOfDecks; i++)
-            {
-                Deck unshuffledDeck = GetUnshuffledDeck();
-
-                while(unshuffledDeck.RemainingCards > 0)
-                {
-                    Card card = unshuffledDeck.TakeCardAtPosition(RandomNumberGenerator.NumberBetween(0, (unshuffledDeck.RemainingCards - 1)));
-
-                    deck.AddCard(card.Value, card.Suit);
-                }
-            }
-
-            return deck;
-        }
-
-        private static Deck GetUnshuffledDeck()
+        public static Deck GetUnshuffledDeck()
         {
             Deck deck = new Deck();
 
@@ -87,6 +63,22 @@
             deck.AddCard(CardValues.Ace, Suits.Spades);
 
             return deck;
+        }
+
+        public static Deck GetShuffledDeck()
+        {
+            Deck shuffledDeck = new Deck();
+
+            Deck unshuffledDeck = GetUnshuffledDeck();
+
+            while(unshuffledDeck.RemainingCards > 0)
+            {
+                Card card = unshuffledDeck.TakeCardAtPosition(RandomNumberGenerator.NumberBetween(0, (unshuffledDeck.RemainingCards - 1)));
+
+                shuffledDeck.AddCard(card.Value, card.Suit);
+            }
+
+            return shuffledDeck;
         }
     }
 }

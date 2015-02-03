@@ -16,11 +16,24 @@ namespace TestCardGameEngine
         }
 
         [TestMethod]
-        public void TestGetTwoDecks()
+        public void TestBurningCards()
         {
-            Deck deck = Shuffler.GetShuffledDecks(2);
+            Deck deck = Shuffler.GetShuffledDeck();
 
-            Assert.AreEqual(104, deck.RemainingCards);
+            Assert.AreEqual(52, deck.RemainingCards);
+
+            deck.BurnCard();
+
+            Assert.AreEqual(51, deck.RemainingCards);
+
+            // This burns more cards than are remaining in the deck.
+            // Make sure it doesn't error out, when burning cards that don't exist in the deck.
+            for(int i = 0; i < 52; i++)
+            {
+                deck.BurnCard();
+            }
+
+            Assert.AreEqual(0, deck.RemainingCards);
         }
     }
 }

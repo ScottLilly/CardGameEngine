@@ -1,12 +1,5 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 using CardGameEngine;
@@ -23,7 +16,7 @@ namespace Sandbox
 
         private void btnStart_Click(object sender, EventArgs e)
         {
-            // Use this to confirm the random shuffler produces the expected hand distribution results.
+            // Use this method to confirm the random shuffler produces the expected hand distribution.
 
             rtbResults.Clear();
 

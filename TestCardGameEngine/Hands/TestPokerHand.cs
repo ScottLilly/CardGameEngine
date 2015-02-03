@@ -330,6 +330,5 @@ namespace TestCardGameEngine.Hands
 
             Assert.AreEqual(PokerHandValues.HighCard, hand.Value);
         }
-
     }
 }
