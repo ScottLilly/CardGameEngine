@@ -5,9 +5,8 @@ namespace CardGameEngine.Hands
 {
     public class PokerHand : Hand
     {
-        // This is to hold the five cards used to make the player's hand.
-        // It's needed so we can deal with game such as Texas Hold 'Em, where the player makes a five card hand out of seven cards
-        private readonly List<Card> _cardsForHand = new List<Card>();
+        private readonly List<Card> _cardsUsedInHand = new List<Card>();
+        private readonly List<Card> _cardsNotUsedInHand = new List<Card>();
 
         public PokerHandValues Value
         {
